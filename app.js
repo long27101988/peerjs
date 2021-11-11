@@ -39,32 +39,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 const server = http.createServer(app)
+const serverSecure = https.createServer(app)
 
 const peerServer = ExpressPeerServer(server, {
     debug: true,
     key: "macaw-peer-server-cao-hoang-long-dep-trai-qua",
     proxied: true,
-ssl: {
-	cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
-	key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
-}
-    // config: {
-    //     'iceServers': [
-    //         { url: 'stun:stun1.l.google.com:19302' },
-    //         { url: 'stun:stun2.l.google.com:19302' }
-    //     ],
-    //     "iceCandidatePoolSize": 10
-    // },
+    ssl: {
+      cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
+      key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
+    }
 })
 
 app.use('/peerjs', peerServer);
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+// app.set('port', port);
 
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+serverSecure.listen(4431);
+serverSecure.on('error', onError);
+serverSecure.on('listening', onListening);
 
 
 function onError(error) {
