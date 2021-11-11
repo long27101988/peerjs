@@ -5,7 +5,8 @@ var logger = require('morgan');
 var {ExpressPeerServer} = require('peer');
 require('dotenv').config();
 const http = require('http');
-
+const fs = require('fs')
+const https = require('https');
 var debug = require('debug')('peer-server:server');
 
 function normalizePort(val) {
@@ -43,6 +44,10 @@ const peerServer = ExpressPeerServer(server, {
     debug: true,
     key: "macaw-peer-server-cao-hoang-long-dep-trai-qua",
     proxied: true,
+ssl: {
+	cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
+	key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
+}
     // config: {
     //     'iceServers': [
     //         { url: 'stun:stun1.l.google.com:19302' },
