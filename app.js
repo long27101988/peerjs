@@ -45,13 +45,24 @@ const peerServer = ExpressPeerServer(server, {
     debug: true,
     key: "macaw-peer-server-cao-hoang-long-dep-trai-qua",
     proxied: true,
-    ssl: {
-      cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
-      key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
-    }
+    // ssl: {
+    //   cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
+    //   key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
+    // }
 })
 
+
+const peerServerSecure = ExpressPeerServer(serverSecure, {
+  debug: true,
+  key: "macaw-peer-server-cao-hoang-long-dep-trai-qua",
+  proxied: true,
+  ssl: {
+    cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
+  }
+})
 app.use('/peerjs', peerServer);
+app.use('/peerjss', peerServerSecure);
 
 var port = normalizePort(process.env.PORT || '3000');
 // app.set('port', port);
