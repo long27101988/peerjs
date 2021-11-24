@@ -57,8 +57,8 @@ const peerServerSecure = ExpressPeerServer(serverSecure, {
   key: "macaw-peer-server-cao-hoang-long-dep-trai-qua",
   proxied: true,
   ssl: {
-    cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
+    cert:fs.readFileSync('/root/ssl_cert/rule-app.ml/certificate1.crt'),
+    key: fs.readFileSync('/root/ssl_cert/rule-app.ml/private.key'),
   }
 })
 app.use('/peerjs', peerServer);
