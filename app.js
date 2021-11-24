@@ -7,6 +7,9 @@ require('dotenv').config();
 const http = require('http');
 const fs = require('fs')
 const https = require('https');
+const helmet = require('helmet');
+const xss = require('xss-clean')
+const compression = require('compression');
 var debug = require('debug')('peer-server:server');
 
 function normalizePort(val) {
@@ -25,16 +28,17 @@ function normalizePort(val) {
     return false;
   }
 
-
-
-
 var app = express();
-app.enable("trust proxy");
 app.use(logger('dev'));
+app.use(helmet());
+app.use(helmet.hidePoweredBy());
+app.use(xss());
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.set("trust proxy", 1);
 
 
 
@@ -57,7 +61,7 @@ const peerServerSecure = ExpressPeerServer(serverSecure, {
   key: "macaw-peer-server-cao-hoang-long-dep-trai-qua",
   proxied: true,
   ssl: {
-    cert:fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/fullchain.pem'),
     key: fs.readFileSync('/etc/letsencrypt/live/rule-app.ml/privkey.pem'),
   }
 })
